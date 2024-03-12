@@ -1,7 +1,7 @@
-float squareSize = 20;
+float squareSize = 5;
 int smokeDecay = 25;
-int gridWidth = 40;
-int gridHeight = 40;
+int gridWidth = 160;
+int gridHeight = 160;
 float[][] waterGrid = new float[gridHeight][];
 int[][] grid = new int[gridHeight][];
 int[][] newGrid = new int[gridHeight][];
@@ -18,13 +18,13 @@ void setup() {
 }
 
 void draw() {
-  if (generation < 15) {
+  if (generation < 1500) {
     println("Generation: " + generation);
     updateGrid();
     drawGrid();
     delay(100);
     generation ++;
-  } else if (generation == 15) {
+  } else if (generation == -15) {
     for (int i = 0; i < gridHeight; i++) {
       for (int j = 0; j < gridWidth; j++) {
         if (grid[i][j] == 1) continue;
@@ -765,6 +765,7 @@ void drawGrid() {
           //continue;
         }
       }
+      else if (grid[i][j] == 8) fill (0, 255, 0);
       else fill(255);
       rect(j * squareSize, i * squareSize, squareSize, squareSize);
       //if (grid[i][j] == 7) {
@@ -777,5 +778,21 @@ void drawGrid() {
       //  text(waterGrid[i][j], textX, textY); // Draw the number (or any other value you want)
       //}
     }
+  }
+}
+
+void mousePressed() {
+  // Calculate which grid cell was clicked
+  int clickedRow = (int)(mouseY / squareSize);
+  int clickedCol = (int)(mouseX / squareSize);
+
+  // Check if the click is within the bounds of the grid
+  if (clickedRow >= 0 && clickedRow < gridHeight && clickedCol >= 0 && clickedCol < gridWidth) {
+    // Set the grid cell to a new value, e.g., adding an element
+    // Example: Set the clicked cell to have a value indicating a new element was added
+    grid[clickedRow][clickedCol] = 8; // or any other value you'd like to represent the new element
+
+    // Optionally, set waterGrid value if needed, for example:
+    //waterGrid[clickedRow][clickedCol] = 1.0; // setting full water value, adjust as necessary
   }
 }
