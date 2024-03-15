@@ -90,13 +90,20 @@ class Grid {
         this.waterGrid[i + 1][j] = this.waterGrid[i][j];
         this.waterGrid[i][j] = 0.;
     }
-    else if (i + 1 < this.gridHeight && this.newGrid[i + 1][j] == 7 && this.waterGrid[i+1][j] < 1. + this.waterTreshold) {
-      if(i == 8 && j == 2) {
-        println("##############################################");
-        this.printGrid();
+    else if (i + 1 < this.gridHeight && this.newGrid[i + 1][j] == 7 && this.waterGrid[i+1][j] < 1.) {
+      if (i == 8 && j == 0) {
+        println("asidhapdihasopd");
+        println(this.waterGrid[i+1][j]);
       }
       float waterTransfer;
-      if (i - 1 >= 0 && this.newGrid[i-1][j] == 7 && this.waterGrid[i-1][j] >= 1) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i + 1][j]);
+      //if (i - 1 >= 0 && this.newGrid[i-1][j] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i + 1][j]);
+      //if (this.newGrid[i][j] == 7 && this.waterGrid[i][j] > 1.) waterTransfer = abs(this.waterGrid[i][j] - this.waterGrid[i+1][j]);
+      //else if (i - 1 >= 0 && this.newGrid[i-1][j] == 7) {
+      //  if (this.waterGrid[i-1][j] >= this.waterTreshold) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i + 1][j]);
+      //  else waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i + 1][j]);
+      //}
+      if (i - 1 >= 0 && (this.newGrid[i-1][j] == 7 && this.waterGrid[i][j] > 1. || (i-2 >= 0 && this.newGrid[i-2][j] == 7))) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i + 1][j]);
+      //if (i - 1 >= 0 && this.newGrid[i-1][j] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i + 1][j]);
       else waterTransfer = abs(1. - this.waterGrid[i + 1][j]);
       
       println(waterTransfer);
@@ -119,29 +126,70 @@ class Grid {
       this.newGrid[i][j+1] = 7;
     }
     //else if (j + 1 < this.gridWidth && j - 1 >= 0 && this.newGrid[i][j+1] == 7 && this.newGrid[i][j-1] == 7) {
-    //  //float waterTransfer = (this.waterGrid[i][j+1] + this.waterGrid[i][j] + this.waterGrid[i][j-1])/3;
-    //  //this.waterGrid[i][j] = waterTransfer;
-    //  //this.waterGrid[i][j+1] = waterTransfer;
-    //  //this.waterGrid[i][j-1] = waterTransfer;
+    //  float waterTransfer = (this.waterGrid[i][j+1] + this.waterGrid[i][j] + this.waterGrid[i][j-1])/3;
+    //  this.waterGrid[i][j] = waterTransfer;
+    //  this.waterGrid[i][j+1] = waterTransfer;
+    //  this.waterGrid[i][j-1] = waterTransfer;
     //}
     else if (j + 1 < this.gridWidth && this.newGrid[i][j+1] == 7 && this.waterGrid[i][j] > this.waterGrid[i][j+1]) {
       float waterTransfer = (this.waterGrid[i][j] + this.waterGrid[i][j+1])/2;
-      if (i - 1 >= 0 && this.newGrid[i-1][j] == 7 && this.waterGrid[i-1][j] >= 1) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
-      else if (j - 1 >= 0 && this.newGrid[i][j-1] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
-      else waterTransfer = abs(1. - this.waterGrid[i][j+1]);
-      //this.waterGrid[i][j] = waterTransfer;
-      //this.waterGrid[i][j+1] = waterTransfer;
-      if (this.waterGrid[i][j+1] < (1. + this.waterTreshold)) {
-        if (waterTransfer < this.waterGrid[i][j]) {
-          this.waterGrid[i][j+1] += waterTransfer;
-          this.waterGrid[i][j] -= waterTransfer;
-        } else {
-          this.waterGrid[i][j+1] += this.waterGrid[i][j];
-          this.waterGrid[i][j] = 0;
+      if (i == 8 && j == 0) {
+        println("asidhapdihasopd");
+        println(this.waterGrid[i][j] > 1.);
+      }
+      //if (i - 1 >= 0 && this.newGrid[i-1][j] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
+      //else if (j - 1 >= 0 && this.newGrid[i][j-1] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
+      //if (this.waterGrid[i][j] > 1.) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
+      //if (i - 1 >= 0 && this.newGrid[i-1][j] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
+      //else if (j - 1 >= 0 && this.newGrid[i][j-1] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
+      //else waterTransfer = abs(1. - this.waterGrid[i][j+1]);
+      if (this.waterGrid[i][j] > 1.) {
+        waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j+1]);
+        if (this.waterGrid[i][j+1] < (1. + this.waterTreshold)) {
+          if (waterTransfer < this.waterGrid[i][j]) {
+            this.waterGrid[i][j+1] += waterTransfer;
+            this.waterGrid[i][j] -= waterTransfer;
+          } else {
+            this.waterGrid[i][j+1] += this.waterGrid[i][j];
+            this.waterGrid[i][j] = 0;
+          }
         }
       }
+      else { 
+        waterTransfer = (this.waterGrid[i][j] + this.waterGrid[i][j+1])/2;
+        this.waterGrid[i][j] = waterTransfer;
+        this.waterGrid[i][j+1] = waterTransfer;
+      }
+      
+      //if (this.waterGrid[i][j+1] < (1. + this.waterTreshold)) {
+      //  if (waterTransfer < this.waterGrid[i][j]) {
+      //    this.waterGrid[i][j+1] += waterTransfer;
+      //    this.waterGrid[i][j] -= waterTransfer;
+      //  } else {
+      //    this.waterGrid[i][j+1] += this.waterGrid[i][j];
+      //    this.waterGrid[i][j] = 0;
+      //  }
+      //}
       
     }
+    //else if (j - 1 >= 0 && this.newGrid[i][j-1] == 7 && this.waterGrid[i][j] > this.waterGrid[i][j-1]) {
+    //  float waterTransfer = (this.waterGrid[i][j] + this.waterGrid[i][j-1])/2;
+    //  if (i - 1 >= 0 && this.newGrid[i-1][j] == 7 && this.waterGrid[i-1][j] >= 1) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j-1]);
+    //  else if (j + 1 < this.gridWidth && this.newGrid[i][j+1] == 7) waterTransfer = abs((1. + this.waterTreshold) - this.waterGrid[i][j-1]);
+    //  else waterTransfer = abs(1. - this.waterGrid[i][j-1]);
+    //  //this.waterGrid[i][j] = waterTransfer;
+    //  //this.waterGrid[i][j+1] = waterTransfer;
+    //  if (this.waterGrid[i][j-1] < (1. + this.waterTreshold)) {
+    //    if (waterTransfer < this.waterGrid[i][j]) {
+    //      this.waterGrid[i][j-1] += waterTransfer;
+    //      this.waterGrid[i][j] -= waterTransfer;
+    //    } else {
+    //      this.waterGrid[i][j-1] += this.waterGrid[i][j];
+    //      this.waterGrid[i][j] = 0;
+    //    }
+    //  }
+      
+    //}
     else if (this.waterGrid[i][j] > 1.) {
        if (i - 1 >= 0 && this.newGrid[i-1][j] == 0 || this.newGrid[i-1][j] == 7) {
          float waterTransfer = abs(1. - this.waterGrid[i][j]);
@@ -367,6 +415,20 @@ class Grid {
     //this.newGrid[4][4] = 1;
     
     //this.newGrid[9][1] = 1;
+    //this.newGrid[8][1] = 1;
+    //this.newGrid[7][1] = 1;
+    //this.newGrid[6][1] = 1;
+    //this.newGrid[5][1] = 1;
+    //this.newGrid[4][1] = 1;
+    
+    //this.newGrid[9][3] = 1;
+    //this.newGrid[8][3] = 1;
+    //this.newGrid[7][3] = 1;
+    //this.newGrid[6][3] = 1;
+    //this.newGrid[5][3] = 1;
+    //this.newGrid[4][3] = 1;
+    
+    
     this.newGrid[8][2] = 1;
     this.newGrid[7][2] = 1;
     this.newGrid[6][2] = 1;
@@ -384,7 +446,10 @@ class Grid {
     this.newGrid[7][0] = 7;
     this.newGrid[6][0] = 7;
     this.newGrid[5][0] = 7;
-    //this.newGrid[4][0] = 7;
+    this.newGrid[4][0] = 7;
+    this.newGrid[3][0] = 7;
+    this.newGrid[2][0] = 7;
+    this.newGrid[1][0] = 7;
     
     //this.newGrid[4][0] = 7;
     //this.newGrid[4][1] = 7;
@@ -405,7 +470,10 @@ class Grid {
     this.waterGrid[7][0] = 1.;
     this.waterGrid[6][0] = 1.;
     this.waterGrid[5][0] = 1.;
-    //this.waterGrid[4][0] = 1.;
+    this.waterGrid[4][0] = 1.;
+    this.waterGrid[3][0] = 1.;
+    this.waterGrid[2][0] = 1.;
+    this.waterGrid[1][0] = 1.;
     
     //this.waterGrid[4][0] = 1.;
     //this.waterGrid[4][1] = 1.;
@@ -450,6 +518,13 @@ class Grid {
   void drawGrid() {
     for (int i = 0; i < this.gridHeight; i++) {
       for (int j = 0; j < this.gridWidth; j++) {
+        if (this.grid[i][j] == 7 && this.waterGrid[i][j] < 0.0001) {
+          this.grid[i][j] = 0;
+          this.waterGrid[i][j] = 0.;
+        }
+        else if (this.grid[i][j] == 7 && this.waterGrid[i][j] > 0.999 && this.waterGrid[i][j] < 1.) {
+          this.waterGrid[i][j] = 1.;
+        }
         if (this.grid[i][j] == 0) fill(0);
         else if (this.grid[i][j] == 1) fill(255);
         else if (this.grid[i][j] == 7) fill(0, 0, 155 + (int)(((this.waterTreshold + 1.) - this.waterGrid[i][j]) * 100));
